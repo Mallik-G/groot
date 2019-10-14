@@ -1,0 +1,21 @@
+input:
+  source: file system
+  extension: csv
+  compression: null
+  schema: id int, text string
+  spark_conf:
+    header: true
+    sep: ","
+  path: mock_data/input.csv
+output:
+  target: file system
+  format: delta
+  path: tmp/
+  schema: schema_dev
+  table: table_dev
+  partition_columns:
+    - text
+  unique_key:
+    - id
+  order_unique_key_by:
+    - text
