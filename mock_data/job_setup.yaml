@@ -10,7 +10,7 @@ input:
 output:
   target: file system
   format: delta
-  path: tmp/
+  path: tmp\
   schema: schema_dev
   table: table_dev
   partition_columns:

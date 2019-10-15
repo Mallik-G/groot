@@ -5,8 +5,9 @@ import com.groot.etl.writers.FsTable
 import com.groot.pipeline.steps.Writer
 import com.groot.yaml.classes.job_setup.JobSetup
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.internal.Logging
 
-object WriteToFileSystem extends Writer with SessionSpark {
+object WriteToFileSystem extends Writer with SessionSpark with Logging {
   protected override def write(df: DataFrame, config: JobSetup): Unit = {
     FsTable.save(
       df,
@@ -19,10 +20,12 @@ object WriteToFileSystem extends Writer with SessionSpark {
   }
 
   protected override def createDatabase(dbName: String): Unit = {
+    log.info("Creating hive database if it doesn't exist")
     spark.sql(s"CREATE DATABASE IF NOT EXISTS ${dbName}")
   }
 
   def run(df: DataFrame, config: JobSetup): Unit = {
+    log.info("Executing file system writer")
     createDatabase(config.output.schema)
     write(df, config)
   }
